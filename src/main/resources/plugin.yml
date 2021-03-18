@@ -1,0 +1,4 @@
+main: com.ankoki.blossom.Blossom
+name: Blossom
+version: alpha
+api-version: 1.16
