@@ -14,13 +14,13 @@ public class Shapes {
     /**
      * (W.I.P) A method to get all the points to make up a giant donut looking thing.
      *
-     * @param centre The center of the torus.
+     * @param center The center of the torus.
      * @param majorRadius The radius of the outside.
      * @param minorRadius The radius of the inside.
      * @param density The density of the particles.
      * @return All locations to make up the torus.
      */
-    public static List<Location> getTorus(Location centre, double majorRadius, double minorRadius, double density) {
+    public static List<Location> getTorus(Location center, double majorRadius, double minorRadius, double density) {
         List<Location> torusPoints = new ArrayList<>();
         double pointsOnMajor = _2PI * majorRadius * density;
         double pointsOnMinor = _2PI * minorRadius * density;
@@ -29,13 +29,13 @@ public class Shapes {
         double thetaMajor = 0;
         for (int i = 0; i < pointsOnMajor; i++) {
             Vector tubeOffset = new Vector(Math.cos(thetaMajor * majorRadius), 0, Math.sin(thetaMajor * majorRadius));
-            Location tube = centre.clone();
+            Location tube = center.clone();
             tube.add(tubeOffset);
             double rotationAngle = 540 - thetaMajor;
             double thetaMinor = 0;
             for (int ii = 0; ii < pointsOnMinor; ii++) {
                 Vector offset = new Vector(Math.cos(thetaMinor * minorRadius), Math.sin(thetaMinor * minorRadius), 0);
-                VectorMath.rotY(offset, rotationAngle);
+                offset.rotateAroundY(rotationAngle);
                 Location toOffset = tube.clone();
                 toOffset.add(offset);
                 torusPoints.add(toOffset);
@@ -49,20 +49,20 @@ public class Shapes {
     /**
      * A method to get the list of locations in a circle.
      *
-     * @param centre The centre of the circle.
+     * @param center The centre of the circle.
      * @param radius The radius of the circle.
      * @param totalPoints The total amount of points to make up the circle.
      * @return The list of locations to make up a circle.
      */
-    public static List<Location> getCircle(Location centre, double radius, double totalPoints) {
-        World world = centre.getWorld();
+    public static List<Location> getCircle(Location center, double radius, double totalPoints) {
+        World world = center.getWorld();
         double increment = _2PI/totalPoints;
         List<Location> locations = new ArrayList<>();
         for (int i = 0; i < totalPoints; i++) {
             double angle = i * increment;
-            double x = centre.getX() + (radius * Math.cos(angle));
-            double z = centre.getZ() + (radius * Math.sin(angle));
-            locations.add(new Location(world, x, centre.getY(), z));
+            double x = center.getX() + (radius * Math.cos(angle));
+            double z = center.getZ() + (radius * Math.sin(angle));
+            locations.add(new Location(world, x, center.getY(), z));
         }
         return locations;
     }
@@ -70,12 +70,12 @@ public class Shapes {
     /**
      * A method to get a list of locations of the points of a star.
      *
-     * @param centre The centre of the star.
+     * @param center The centre of the star.
      * @param radius The radius of the circle which makes up the outer edge of the star.
      * @param vertices The amount of vertices a star has.
      * @return A list of locations of all points of a star.
      */
-    public static List<Location> getStarPoints(Location centre, double radius, int vertices) {
+    public static List<Location> getStarPoints(Location center, double radius, int vertices) {
         List<Location> locations = new ArrayList<>();
         double delta = _2PI / vertices;
         boolean bug = false;
@@ -85,7 +85,7 @@ public class Shapes {
                 continue;
             }
             Vector offset = new Vector(Math.sin(theta) * radius, 0, Math.cos(theta) * radius);
-            Location vertex = centre.clone();
+            Location vertex = center.clone();
             vertex.add(offset);
             if (!locations.contains(vertex)) {
                 locations.add(vertex);
@@ -118,21 +118,22 @@ public class Shapes {
     /**
      * A method to get a list of locations to make up a cone.
      *
-     * @param centre The centre of the bottom of the cone.
+     * @param center The centre of the bottom of the cone.
      * @param radius The radius of the face.
      * @param height The height of the cone.
      * @param density The density of the cone.
      * @param pointsPerCircle The amount of points per circle.
      * @return A list of locations to make up a cone.
      */
-    public static List<Location> drawCone(Location centre, double radius, double height, double density, double pointsPerCircle) {
+    public static List<Location> drawCone(Location center, double radius, double height, double density, double pointsPerCircle) {
         List<Location> points = new ArrayList<>();
         double space = 1 / density;
         double amount = height / space;
         double interval = radius / amount;
+        Location c = center.clone();
         for (int i = 0; i <= amount; i++) {
-            centre.add(0, space, 0);
-            points.addAll(Shapes.getCircle(centre, radius, pointsPerCircle));
+            c.add(0, space, 0);
+            points.addAll(Shapes.getCircle(c, radius, pointsPerCircle));
             radius = radius - interval;
         }
         return points;
