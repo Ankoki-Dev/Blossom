@@ -2,6 +2,9 @@ package com.ankoki.blossom.utils;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -151,5 +154,67 @@ public class Utils {
      */
     public static void registerListeners(JavaPlugin plugin, Listener... listeners) {
         Arrays.stream(listeners).forEach(listener -> Bukkit.getServer().getPluginManager().registerEvents(listener, plugin));
+    }
+
+    /**
+     * Utility method to check wether or not a location is between/within 2 locations.
+     *
+     * @param loc The location you want to check.
+     * @param loc1 The first point of the location box.
+     * @param loc2 The second point of the location box.
+     * @return Returns if the location is between/within the two other locations given.
+     */
+    public static boolean locationIsWithin(Location loc, Location loc1, Location loc2) {
+        double x1 = Math.min(loc1.getX(), loc2.getX());
+        double y1 = Math.min(loc1.getY(), loc2.getY());
+        double z1 = Math.min(loc1.getZ(), loc2.getZ());
+        double x2 = Math.max(loc1.getX(), loc2.getX());
+        double y2 = Math.max(loc1.getY(), loc2.getY());
+        double z2 = Math.max(loc1.getZ(), loc2.getZ());
+        Location l1 = new Location(loc1.getWorld(), x1, y1, z1);
+        Location l2 = new Location(loc1.getWorld(), x2, y2, z2);
+        return loc.getBlockX() >= l1.getBlockX() && loc.getBlockX() <= l2.getBlockX()
+                && loc.getBlockY() >= l1.getBlockY() && loc.getBlockY() <= l2.getBlockY()
+                && loc.getBlockZ() >= l1.getBlockZ() && loc.getBlockZ() <= l2.getBlockZ();
+    }
+
+    /**
+     * Utiltiy method to get the closest entity to a location.
+     *
+     * @param location The location you want to get the closest entity to.
+     * @return The closest entity to the given location.
+     */
+    public static Entity nearestEntity(Location location) {
+        Entity result = null;
+        double lastDistance = Double.MAX_VALUE;
+        for (Entity ent : location.getWorld().getEntities()) {
+            double dist = location.distanceSquared(ent.getLocation());
+            if (dist < lastDistance) {
+                result = ent;
+                lastDistance = dist;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Utiltiy method to get the closest entity to a player.
+     *
+     * @param player The player you want to get the closest entity to.
+     * @return The closest entity to the given player.
+     */
+    public static Entity nearestEntity(Player player) {
+        Location location = player.getLocation();
+        Entity result = null;
+        double lastDistance = Double.MAX_VALUE;
+        for (Entity ent : location.getWorld().getEntities()) {
+            if (ent == player) continue;
+            double dist = location.distanceSquared(ent.getLocation());
+            if (dist < lastDistance) {
+                result = ent;
+                lastDistance = dist;
+            }
+        }
+        return result;
     }
 }
