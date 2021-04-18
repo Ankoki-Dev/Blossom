@@ -12,38 +12,32 @@ public class Shapes {
     private static final double _3PI = Math.PI + Math.PI + Math.PI;
 
     /**
-     * A method to get a list of locations to make up a torus.
+     * A method to get all the points to make up a giant donut looking thing.
      *
-     * @param centre The centre of a torus.
-     * @param majorRadius The major radius of the torus.
-     * @param minorRadius The minor radius of the torus.
-     * @param density The density of the torus.
-     * @return All locations to make up a torus.
+     * @param centre The center of the torus.
+     * @param majorRadius The radius of the outside.
+     * @param minorRadius The radius of the inside.
+     * @param density The density of the particles.
+     * @return All locations to make up the torus.
      */
+
     public static List<Location> getTorus(Location centre, double majorRadius, double minorRadius, double density) {
+        double majorCircumference = _2PI * majorRadius * density;
+        double minorCircumference = _2PI * minorRadius * density;
         List<Location> points = new ArrayList<>();
-        double majorPoints = _2PI * majorRadius * density;
-        double minorPoints = _2PI * minorRadius * density;
-        double deltaMajor = _2PI / majorPoints;
-        double deltaMinor = _2PI / minorPoints;
-        double thetaMajor = 0;
-        for (int i = 0; i < majorPoints; i++) {
-            Vector tubeOffset = new Vector(Math.cos(thetaMajor) * minorRadius, 0, Math.sin(thetaMajor * majorRadius));
-            Location tube = centre.clone();
-            tube.add(tubeOffset);
-            double rotAngle = _3PI - thetaMajor;
-            double thetaMinor = 0;
-            for (int ii = 0; ii < minorPoints; ii++) {
-                Vector offset = new Vector(Math.cos(thetaMinor) * minorRadius, Math.sin(thetaMinor) * minorRadius, 0);
-                offset.rotateAroundY(rotAngle);
-                Location fin = tube.clone();
-                fin.add(offset);
-                points.add(fin);
-                thetaMinor += deltaMinor;
+        double deltaMajor = _2PI / majorCircumference;
+        double deltaMinor = _2PI / minorCircumference;
+        for (int i = 0; i < (int) minorCircumference; i++) {
+            double cosTheta = Math.cos(i * deltaMinor), sinTheta = Math.sin(i * deltaMinor);
+            for (int j = 0; j < (int) majorCircumference; j++) {
+                double x = (majorRadius + minorRadius * cosTheta) * Math.cos(j * deltaMajor);
+                double y = minorRadius * sinTheta;
+                double z = (majorRadius + minorRadius * cosTheta) * Math.sin(j * deltaMajor);
+                Location point = centre.clone();
+                point.add(new Vector(x, y, z));
+                points.add(point);
             }
-            thetaMajor += deltaMajor;
-        }
-        return points;
+        } return points;
     }
 
     /**
