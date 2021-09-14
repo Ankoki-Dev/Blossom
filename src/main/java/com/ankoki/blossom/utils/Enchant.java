@@ -47,7 +47,30 @@ public enum Enchant {
         this.bukkitEnchantment = bukkitEnchantment;
     }
 
+    /**
+     * Gets the bukkit enchantment related to the Enchant.
+     *
+     * @return the bukkit enchantment.
+     */
     public Enchantment getBukkitEnchantment() {
         return this.bukkitEnchantment;
+    }
+
+    /**
+     * Gets an Enchant from a bukkit Enchantment.
+     *
+     * @param enchantment bukkit enchantment to look for.
+     * @return Enchant object.
+     */
+    public static Enchant fromBukkitEnchant(Enchantment enchantment) {
+        for (Enchant enchant : Enchant.values()) {
+            if (enchant.getBukkitEnchantment().equals(enchantment)) return enchant;
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return Chat.toTitleCase(name().replace("_", " "));
     }
 }
