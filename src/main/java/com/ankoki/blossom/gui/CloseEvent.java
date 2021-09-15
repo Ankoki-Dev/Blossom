@@ -1,4 +1,4 @@
-package com.ankoki.blossom.utils.events.gui;
+package com.ankoki.blossom.gui;
 
 import org.bukkit.event.inventory.InventoryCloseEvent;
 

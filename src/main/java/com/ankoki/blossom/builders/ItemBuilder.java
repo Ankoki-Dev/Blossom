@@ -128,7 +128,7 @@ public class ItemBuilder {
     public ItemBuilder setDisplayName(String name) {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return this;
-        meta.setDisplayName(Chat.coloured(name));
+        meta.setDisplayName(Chat.format(name));
         item.setItemMeta(meta);
         return this;
     }
