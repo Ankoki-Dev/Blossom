@@ -163,7 +163,7 @@ public class Shapes {
      *
      */
     public static List<Location> getSphere(Location centreBlock, int radius, boolean hollow) {
-        List<Location> circleBlocks = new ArrayList<Location>();
+        List<Location> circleBlocks = new ArrayList<>();
         int bx = centreBlock.getBlockX();
         int by = centreBlock.getBlockY();
         int bz = centreBlock.getBlockZ();

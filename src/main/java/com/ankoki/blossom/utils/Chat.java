@@ -1,5 +1,6 @@
 package com.ankoki.blossom.utils;
 
+import com.ankoki.blossom.items.Enchant;
 import net.md_5.bungee.api.ChatColor;
 
 import java.awt.*;
@@ -181,23 +182,23 @@ public class Chat {
      * <p>
      * For example, "hello world" to "Hello World"
      *
-     * @param inputString text to be in title case.
+     * @param text text to be in title case.
      * @return string in title case.
      */
-    public static String toTitleCase(String inputString) {
-        if (inputString == null || inputString.isEmpty() || inputString.isBlank()) return "";
-        if (inputString.length() == 1) return inputString.toUpperCase();
-        inputString = inputString.replace("_", " ");
+    public static String toTitleCase(String text) {
+        if (text == null || text.isEmpty() || text.isBlank()) return "";
+        if (text.length() == 1) return text.toUpperCase();
+        text = text.replace("_", " ");
 
-        StringBuffer resultPlaceholder = new StringBuffer(inputString.length());
+        StringBuilder builder = new StringBuilder(text.length());
 
-        Stream.of(inputString.split(" ")).forEach(stringPart -> {
+        Stream.of(text.split(" ")).forEach(stringPart -> {
             char[] charArray = stringPart.toLowerCase().toCharArray();
             charArray[0] = Character.toUpperCase(charArray[0]);
-            resultPlaceholder.append(new String(charArray)).append(" ");
+            builder.append(new String(charArray)).append(" ");
         });
-        resultPlaceholder.setLength(resultPlaceholder.length() - 1);
-        return resultPlaceholder.toString();
+        builder.setLength(builder.length() - 1);
+        return builder.toString();
     }
 
     /**
@@ -209,5 +210,20 @@ public class Chat {
      */
     public static String formattedEnchant(Enchant enchant, int level) {
         return enchant.toString() + " " + Utils.toRoman(level);
+    }
+
+    /**
+     * Appends the english order suffix to the given number.
+     *
+     * @param i the number.
+     * @return 1st, 2nd, 3rd, 4th, etc.
+     */
+    public static String numberSuffix(int i) {
+        int iModTen = i % 10;
+        int iModHundred = i % 100;
+        if (iModTen == 1 && iModHundred != 11) return i + "st";
+        else if (iModTen == 2 && iModHundred != 12) return i + "nd";
+        else if (iModTen == 3 && iModHundred != 13) return i + "rd";
+        else return i + "th";
     }
 }

@@ -1,5 +1,6 @@
-package com.ankoki.blossom.utils;
+package com.ankoki.blossom.items;
 
+import com.ankoki.blossom.utils.Chat;
 import org.bukkit.enchantments.Enchantment;
 
 public enum Enchant {

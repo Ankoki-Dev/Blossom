@@ -163,13 +163,13 @@ public class Scoreboard {
     private static final Map<Player, Scoreboard> ALL_SCOREBOARDS = new ConcurrentHashMap<>();
 
     /**
-     * Gets the scoreboard by the player.
+     * Gets the scoreboard of the player, or creates a new one.
      *
      * @param player the player you want the scoreboard of.
-     * @return players scoreboard if set, else null.
+     * @return players scoreboard if set, else a new scoreboard for that player.
      */
-    public static Scoreboard getScoreboard(Player player) {
-        return ALL_SCOREBOARDS.get(player);
+    public static Scoreboard get(Player player) {
+        return ALL_SCOREBOARDS.containsKey(player) ? ALL_SCOREBOARDS.get(player) : new Scoreboard(player);
     }
 
     /**
@@ -177,27 +177,21 @@ public class Scoreboard {
      * <p>
      * Registers a player's scoreboard.
      *
-     * @param player     the player.
+     * @param player the player.
      * @param scoreboard the player's scoreboard.
      */
     private static void registerScoreboard(Player player, Scoreboard scoreboard) {
         ALL_SCOREBOARDS.put(player, scoreboard);
     }
 
-    private final Player player;
-    private final String id;
-
-    private final List<String> lines = new ArrayList<>();
-    private String title = ChatColor.RESET.toString();
-
-    private boolean deleted = false;
-
     /**
+     * INTERNAL USE ONLY
+     * <p>
      * Creates a new Scoreboard.
      *
      * @param player the owner of the scoreboard.
      */
-    public Scoreboard(Player player) {
+    private Scoreboard(Player player) {
         this.player = Objects.requireNonNull(player, "player");
         this.id = "fb-" + Integer.toHexString(ThreadLocalRandom.current().nextInt());
 
@@ -209,6 +203,14 @@ public class Scoreboard {
             throw new RuntimeException("Unable to create scoreboard", t);
         }
     }
+
+    private final Player player;
+    private final String id;
+
+    private final List<String> lines = new ArrayList<>();
+    private String title = ChatColor.RESET.toString();
+
+    private boolean deleted = false;
 
     /**
      * Get the scoreboard title.
@@ -224,7 +226,7 @@ public class Scoreboard {
      *
      * @param title the new scoreboard title.
      * @throws IllegalArgumentException if the title is longer than 32 chars on 1.12 or lower.
-     * @throws IllegalStateException    if {@link #delete()} was call before.
+     * @throws IllegalStateException if {@link #delete()} was call before.
      */
     public void updateTitle(String title) {
         if (this.title.equals(Objects.requireNonNull(title, "title"))) {
@@ -322,7 +324,7 @@ public class Scoreboard {
      *
      * @param lines the new lines
      * @throws IllegalArgumentException if one line is longer than 30 chars on 1.12 or lower.
-     * @throws IllegalStateException    if {@link #delete()} was called before.
+     * @throws IllegalStateException if {@link #delete()} was called before.
      */
     public void updateLines(String... lines) {
         updateLines(Arrays.asList(lines));
@@ -333,7 +335,7 @@ public class Scoreboard {
      *
      * @param lines the new scoreboard lines
      * @throws IllegalArgumentException if one line is longer than 30 chars on 1.12 or lower.
-     * @throws IllegalStateException    if {@link #delete()} was called before.
+     * @throws IllegalStateException if {@link #delete()} was called before.
      */
     public synchronized void updateLines(Collection<String> lines) {
         Objects.requireNonNull(lines, "lines");
@@ -503,7 +505,7 @@ public class Scoreboard {
         Object packet = PACKET_SB_DISPLAY_OBJ.invoke();
 
         setField(packet, int.class, 1); // Position (1: sidebar)
-        setField(packet, String.class, this.id); // Score Name
+        setField(packet, String.class, this.id); // Score CommandInfo
 
         sendPacket(packet);
     }
@@ -511,7 +513,7 @@ public class Scoreboard {
     private void sendScorePacket(int score, ScoreboardAction action) throws Throwable {
         Object packet = PACKET_SB_SCORE.invoke();
 
-        setField(packet, String.class, COLOR_CODES[score], 0); // Player Name
+        setField(packet, String.class, COLOR_CODES[score], 0); // Player CommandInfo
 
         if (VersionType.V1_8.isHigherOrEqual()) {
             setField(packet, ENUM_SB_ACTION, action == ScoreboardAction.REMOVE ? ENUM_SB_ACTION_REMOVE : ENUM_SB_ACTION_CHANGE);
@@ -520,7 +522,7 @@ public class Scoreboard {
         }
 
         if (action == ScoreboardAction.CHANGE) {
-            setField(packet, String.class, this.id, 1); // Objective Name
+            setField(packet, String.class, this.id, 1); // Objective CommandInfo
             setField(packet, int.class, score); // Score
         }
 
@@ -604,6 +606,8 @@ public class Scoreboard {
             Object entityPlayer = PLAYER_GET_HANDLE.invoke(this.player);
             Object playerConnection = PLAYER_CONNECTION.invoke(entityPlayer);
             SEND_PACKET.invoke(playerConnection, packet);
+        } else {
+            ALL_SCOREBOARDS.remove(player);
         }
     }
 

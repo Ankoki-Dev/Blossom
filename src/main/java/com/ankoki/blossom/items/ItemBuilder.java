@@ -1,8 +1,7 @@
-package com.ankoki.blossom.builders;
+package com.ankoki.blossom.items;
 
 
 import com.ankoki.blossom.utils.Chat;
-import com.ankoki.blossom.utils.Enchant;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;

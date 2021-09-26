@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Arrays;
 import java.util.TreeMap;
 
-public class Utils {
+public final class Utils {
     private static final TreeMap<Integer, String> ROMAN_NUMERALS = new TreeMap<>();
 
     static {
@@ -76,7 +76,7 @@ public class Utils {
     }
 
     /**
-     * Utiltiy method to get the closest entity to a location.
+     * Utility method to get the closest entity to a location.
      *
      * @param location The location you want to get the closest entity to.
      * @return The closest entity to the given location.
@@ -95,7 +95,7 @@ public class Utils {
     }
 
     /**
-     * Utiltiy method to get the closest entity to a player.
+     * Utility method to get the closest entity to a player.
      *
      * @param player The player you want to get the closest entity to.
      * @return The closest entity to the given player.

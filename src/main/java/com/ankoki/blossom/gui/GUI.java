@@ -1,6 +1,6 @@
 package com.ankoki.blossom.gui;
 
-import com.ankoki.blossom.builders.ItemBuilder;
+import com.ankoki.blossom.items.ItemBuilder;
 import com.ankoki.blossom.utils.Chat;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
