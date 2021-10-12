@@ -22,9 +22,7 @@ public class InventoryHandler implements Listener {
         for (Map.Entry<Inventory, Map<Integer, ClickEvent>> entry : GUI.ALL_CLICK_EVENTS.entrySet()) {
             if (inv == entry.getKey()) {
                 for (Map.Entry<Integer, ClickEvent> entry1 : entry.getValue().entrySet()) {
-                    if (slot == entry1.getKey()) {
-                        entry1.getValue().onClick(e);
-                    }
+                    if (slot == entry1.getKey()) entry1.getValue().onClick(e);
                 }
             }
         }
@@ -34,9 +32,7 @@ public class InventoryHandler implements Listener {
     private void onInventoryDrag(InventoryDragEvent e) {
         Inventory inv = e.getInventory();
         for (Map.Entry<Inventory, DragEvent> entry : GUI.ALL_DRAG_EVENTS.entrySet()) {
-            if (inv == entry.getKey()) {
-                entry.getValue().onDrag(e);
-            }
+            if (inv == entry.getKey()) entry.getValue().onDrag(e);
         }
     }
 
@@ -44,9 +40,7 @@ public class InventoryHandler implements Listener {
     private void onInventoryClose(InventoryCloseEvent e) {
         Inventory inv = e.getInventory();
         for (Map.Entry<Inventory, CloseEvent> entry : GUI.ALL_CLOSE_EVENTS.entrySet()) {
-            if (inv == entry.getKey()) {
-                entry.getValue().onClose(e);
-            }
+            if (inv == entry.getKey()) entry.getValue().onClose(e);
         }
     }
 }

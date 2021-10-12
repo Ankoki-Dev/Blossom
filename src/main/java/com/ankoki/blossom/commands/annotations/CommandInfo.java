@@ -12,4 +12,5 @@ public @interface CommandInfo {
     String[] aliases() default "";
     String description() default "";
     String permission() default "";
+    String permissionMessage() default "";
 }

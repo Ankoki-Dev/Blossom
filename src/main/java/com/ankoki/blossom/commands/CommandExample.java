@@ -1,5 +1,6 @@
 package com.ankoki.blossom.commands;
 
+import com.ankoki.blossom.Blossom;
 import com.ankoki.blossom.commands.annotations.Argument;
 import com.ankoki.blossom.commands.annotations.BaseCommand;
 import com.ankoki.blossom.commands.annotations.CommandInfo;
@@ -14,7 +15,7 @@ import org.bukkit.entity.Player;
 public class CommandExample {
 
     static {
-        CommandManager.registerCommand(CommandExample.class);
+        CommandManager.registerCommand(CommandExample.class, Blossom.getInstance());
     }
 
     @BaseCommand(sender = CommandUser.PLAYER)

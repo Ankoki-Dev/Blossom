@@ -33,7 +33,7 @@ public class GUI {
      * @return newly created GUI.
      */
     public static GUI createGUI(String name, int rows) {
-        Validate.isTrue(rows <= 6 && rows > 0, "You cannnot have less than 1 or more than 6 rows!");
+        Validate.isTrue(rows <= 6 && rows > 0, "You cannot have less than 1 or more than 6 rows!");
         return new GUI(Bukkit.createInventory(null, rows * 9, Chat.format(name)));
     }
 
@@ -58,7 +58,7 @@ public class GUI {
      * @return newly created GUI.
      */
     public static GUI createGUI(InventoryHolder holder, String name, int rows) {
-        Validate.isTrue(rows <= 6 && rows > 0, "You cannnot have less than 1 or more than 6 rows!");
+        Validate.isTrue(rows <= 6 && rows > 0, "You cannot have less than 1 or more than 6 rows!");
         return new GUI(Bukkit.createInventory(holder, rows * 9, Chat.format(name)));
     }
 
@@ -72,6 +72,17 @@ public class GUI {
      */
     public static GUI createGUI(InventoryHolder holder, String name, InventoryType type) {
         return new GUI(Bukkit.createInventory(holder, type, Chat.format(name)));
+    }
+
+    /**
+     * Checks if an Inventory can hold an ItemStack.
+     *
+     * @param inventory the inventory to check.
+     * @param item the item to check.
+     * @return whether or not the item fits in the inventory.
+     */
+    public static boolean canHold(Inventory inventory, ItemStack item) {
+        return inventory.addItem(item).isEmpty();
     }
 
     /**
