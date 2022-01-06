@@ -1,7 +1,6 @@
 package com.ankoki.blossom.resourcepack;
 
 import com.ankoki.blossom.Blossom;
-import lombok.SneakyThrows;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -27,10 +26,8 @@ public final class ResourcePack {
             if (hash == null) {
                 player.setResourcePack(address);
             } else {
-                if (PAPER_METHOD_EXISTS)
-                    player.setResourcePack(address, hash);
-                else
-                    player.setResourcePack(address, hexStringToByteArray(hash));
+                if (PAPER_METHOD_EXISTS) player.setResourcePack(address, hash);
+                else player.setResourcePack(address, hexStringToByteArray(hash));
             }
         }
     }
@@ -72,10 +69,9 @@ public final class ResourcePack {
          * @return the no-split character if set.
          * @throws IllegalArgumentException thrown if setNoSplit hasn't been called previously.
          */
-        @SneakyThrows
         public static String getNoSplit() {
             if (UNICODE_ASSIGNMENT.containsKey("no-split")) return UNICODE_ASSIGNMENT.get("no-split");
-            throw new IllegalAccessException("You need to set the \"no-split\" character before retrieving!");
+            throw new Error("You need to set the \"no-split\" character before retrieving!");
         }
 
         /**

@@ -2,34 +2,35 @@ package com.ankoki.blossom.commands;
 
 import com.ankoki.blossom.commands.annotations.CommandInfo;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.SimplePluginManager;
 
-import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class CommandManager {
 
+    private static final Map<Class<?>, Object> instances = new HashMap<>();
+
     public static void registerCommand(Class<?> clazz, Plugin plugin) {
-        if (clazz.getAnnotation(CommandInfo.class) == null) throw new IllegalArgumentException("You need to register a class with the @CommandInfo annotation");
-        String name = null;
-        PluginCommand command = BlossomCommand.from(plugin, name).createCommand();
-        Bukkit.getCommandMap().register(name, command);
+        CommandInfo info = clazz.getAnnotation(CommandInfo.class);
+        if (info == null) throw new IllegalArgumentException("You need to register a class with the @CommandInfo annotation");
+        PluginCommand command = BlossomCommand.from(clazz, plugin, info.name())
+                .setDescription(info.description())
+                .setPermission(info.permission())
+                .setPermissionMessage(info.permissionMessage())
+                .setAliases(info.aliases())
+                .createCommand();
+        Bukkit.getCommandMap().register(info.name(), command);
     }
 
-    private static CommandMap getCommandMap() {
+    public static Object getInstance(Class<?> clazz) {
         try {
-            Bukkit.getCommandMap();
-            if (Bukkit.getPluginManager() instanceof SimplePluginManager) {
-                Field field = SimplePluginManager.class.getDeclaredField("commandMap");
-                field.setAccessible(true);
-                return (CommandMap) field.get(Bukkit.getPluginManager());
-            }
+            return instances.containsKey(clazz) ? instances.get(clazz) : clazz.newInstance();
         } catch (ReflectiveOperationException ex) {
             ex.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     public enum CommandUser {

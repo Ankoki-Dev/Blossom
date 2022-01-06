@@ -37,6 +37,6 @@ public class CommandExample {
                 sender = CommandUser.PLAYER)
     private void onArgumentOnesSubArgLol(Player player, Player argumentOne, String argumentTwo) {
         argumentOne.setCustomName(argumentTwo);
-        player.sendMessage("You have changed the nickname of ;arg-1; to ;arg-2;!");
+        player.sendMessage("You have changed the nickname of " + argumentOne.getName() + " to " + argumentTwo + "!");
     }
 }

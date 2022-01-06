@@ -4,11 +4,11 @@ import org.bukkit.plugin.Plugin;
 
 public class CommandImpl extends BlossomCommand {
 
-    public CommandImpl(Plugin plugin, String name) {
-        super(plugin, name, null, null, null);
+    public CommandImpl(Class<?> clazz, Plugin plugin, String name) {
+        super(clazz, plugin, name, null, null, null, null);
     }
 
-    static CommandImpl fromInternal(Plugin plugin, String name) {
-        return new CommandImpl(plugin, name);
+    static CommandImpl fromInternal(Class<?> clazz, Plugin plugin, String name) {
+        return new CommandImpl(clazz, plugin, name);
     }
 }

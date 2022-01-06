@@ -10,6 +10,8 @@ import java.util.stream.Stream;
 
 public class Chat {
 
+    private static final Pattern pattern = Pattern.compile("(<#[\\da-fA-F]{6}>)");
+
     /**
      * Utility to format convert a string into a coloured string, supporting
      * rainbow (&t) and pastel rainbows (&u).
@@ -22,7 +24,6 @@ public class Chat {
         double amp1 = 0, amp2 = 2, amp3 = 4;
         int center = 0;
         int width = 0;
-        Pattern pattern = Pattern.compile("(<#[\\da-fA-F]{6}>)");
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
             String matched = matcher.group(1)
@@ -84,7 +85,6 @@ public class Chat {
                             char[] arr = new char[12];
                             System.arraycopy(text.toCharArray(), i + 1, arr, 0, 12);
                             String following = new String(arr);
-                            pattern = Pattern.compile("((?:§[\\da-fA-F]){6})");
                             matcher = pattern.matcher(following);
                             if (matcher.find()) {
                                 currentColourCode = "§x" + matcher.group(1);

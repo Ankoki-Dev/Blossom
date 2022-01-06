@@ -1,12 +1,7 @@
 package com.ankoki.blossom;
 
-import com.ankoki.blossom.gui.GUI;
 import com.ankoki.blossom.listeners.InventoryHandler;
 import com.ankoki.blossom.utils.Utils;
-import lombok.Getter;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Method;
@@ -20,7 +15,6 @@ import java.lang.reflect.Method;
  */
 public class Blossom extends JavaPlugin {
 
-    @Getter
     private static JavaPlugin instance;
 
     @Override
@@ -71,5 +65,9 @@ public class Blossom extends JavaPlugin {
         } catch (NoSuchMethodException ex) {
             return false;
         }
+    }
+
+    public static JavaPlugin getInstance() {
+        return instance;
     }
 }
