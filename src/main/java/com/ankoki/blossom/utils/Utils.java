@@ -114,4 +114,6 @@ public final class Utils {
         }
         return result;
     }
+
+    public void test(){}
 }
